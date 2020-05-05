@@ -51,6 +51,8 @@ public class Reader {
                         ReaderResource res = new ReaderResource();
                         res.setName(fileEntry.getName());
                         res.setPath(fileEntry.getAbsolutePath());
+                        res.setFile(fileEntry);
+                        res.process();
                         addto.addResource(res);
                     } else {
                         System.out.println("- " + fileEntry.getName() + " (ignored)");
