@@ -28,4 +28,8 @@ public class ReaderResource implements ReaderObject {
     public void setPath(String path) {
         this.path = path;
     }
+
+    public boolean isRes() {
+        return res;
+    }
 }

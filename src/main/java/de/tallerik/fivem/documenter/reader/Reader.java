@@ -5,7 +5,6 @@ import de.tallerik.fivem.documenter.reader.types.ReaderPackage;
 import de.tallerik.fivem.documenter.reader.types.ReaderResource;
 
 import java.io.File;
-import java.util.List;
 
 public class Reader {
     File file;

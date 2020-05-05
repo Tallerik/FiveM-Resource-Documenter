@@ -12,6 +12,8 @@ public class Launcher {
     public static List<String> ignoreResources;
     public static List<String> ignorePackages;
     public static void main(String[] args) {
+
+        // Init
         String path = "D:\\fiveM\\server\\resources";
         ignorePackages = new ArrayList<String>();
         ignorePackages.add("[gamemodes]"); // Example
@@ -19,6 +21,7 @@ public class Launcher {
         ignoreResources.add("_default");   // Example
 
 
+        // Start reading and generating
         new Reader(path);
         new Generator(res);
         System.out.println("Done.");
