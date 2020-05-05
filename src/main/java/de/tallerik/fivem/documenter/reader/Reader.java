@@ -1,5 +1,6 @@
 package de.tallerik.fivem.documenter.reader;
 
+import de.tallerik.fivem.documenter.Launcher;
 import de.tallerik.fivem.documenter.reader.types.ReaderPackage;
 import de.tallerik.fivem.documenter.reader.types.ReaderResource;
 
@@ -23,6 +24,7 @@ public class Reader {
         pack.setName("root");
         pack = loopThrow(file, pack);
         // Pack is finished generating here!
+        Launcher.res = pack;
     }
 
     public ReaderPackage loopThrow(final File folder, ReaderPackage addto) {
