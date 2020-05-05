@@ -1,5 +1,8 @@
 package de.tallerik.fivem.documenter.reader.types;
 
+import de.tallerik.fivem.documenter.generator.types.LuaFile;
+import de.tallerik.fivem.documenter.generator.types.ScriptType;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -16,9 +19,9 @@ public class ReaderResource implements ReaderObject {
     boolean res = true;
     File file;
     File manifest = null;
-    List<File> clientLua = new ArrayList<>();
-    List<File> serverLua = new ArrayList<>();
-    List<File> sharedLua = new ArrayList<>();
+    List<LuaFile> clientLua = new ArrayList<>();
+    List<LuaFile> serverLua = new ArrayList<>();
+    List<LuaFile> sharedLua = new ArrayList<>();
     Map<String, File> dataFiles = new HashMap<>();
     Map<String, String> properties = new HashMap<>();
     boolean serverOnly = false;
@@ -60,15 +63,15 @@ public class ReaderResource implements ReaderObject {
         return manifest;
     }
 
-    public List<File> getClientLua() {
+    public List<LuaFile> getClientLua() {
         return clientLua;
     }
 
-    public List<File> getServerLua() {
+    public List<LuaFile> getServerLua() {
         return serverLua;
     }
 
-    public List<File> getSharedLua() {
+    public List<LuaFile> getSharedLua() {
         return sharedLua;
     }
 
@@ -147,9 +150,9 @@ public class ReaderResource implements ReaderObject {
                     bracket = "client";
                 } else {
                     if(line.split("'")[1] != null) {
-                        clientLua.add(new File(basePath + sep + line.split("'")[1]));
+                        clientLua.add(new LuaFile(basePath + sep + line.split("'")[1], ScriptType.CLIENT_SCRIPT));
                     } else if(line.split("\"")[1] != null) {
-                        clientLua.add(new File(basePath + sep + line.split("\"")[1]));
+                        clientLua.add(new LuaFile(basePath + sep + line.split("\"")[1], ScriptType.CLIENT_SCRIPT));
                     }
                 }
             }
@@ -163,9 +166,9 @@ public class ReaderResource implements ReaderObject {
                         continue;  // TODO: Workaround for this
                     }
                     if(line.split("'")[1] != null) {
-                        serverLua.add(new File(basePath + sep + line.split("'")[1]));
+                        serverLua.add(new LuaFile(basePath + sep + line.split("'")[1], ScriptType.SERVER_SCRIPT));
                     } else if(line.split("\"")[1] != null) {
-                        serverLua.add(new File(basePath + sep + line.split("\"")[1]));
+                        serverLua.add(new LuaFile(basePath + sep + line.split("\"")[1], ScriptType.SERVER_SCRIPT));
                     }
                 }
             }
@@ -179,9 +182,9 @@ public class ReaderResource implements ReaderObject {
                         continue;  // TODO: Workaround for this
                     }
                     if(line.split("'")[1] != null) {
-                        sharedLua.add(new File(basePath + sep + line.split("'")[1]));
+                        sharedLua.add(new LuaFile(basePath + sep + line.split("'")[1], ScriptType.SHARED_SCRIPT));
                     } else if(line.split("\"")[1] != null) {
-                        sharedLua.add(new File(basePath + sep + line.split("\"")[1]));
+                        sharedLua.add(new LuaFile(basePath + sep + line.split("\"")[1], ScriptType.SHARED_SCRIPT));
                     }
                 }
             }
@@ -202,11 +205,11 @@ public class ReaderResource implements ReaderObject {
                 }
                 File file = new File(basePath + sep + name);
                 if(bracket.equals("client")) {
-                    clientLua.add(file);
+                    clientLua.add(new LuaFile(file, ScriptType.CLIENT_SCRIPT));
                 } else if(bracket.equals("server")) {
-                    serverLua.add(file);
+                    serverLua.add(new LuaFile(file, ScriptType.SERVER_SCRIPT));
                 } else if(bracket.equals("shared")) {
-                    sharedLua.add(file);
+                    sharedLua.add(new LuaFile(file, ScriptType.SHARED_SCRIPT));
                 }
             }
 
