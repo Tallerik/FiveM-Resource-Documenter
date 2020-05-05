@@ -1,11 +1,16 @@
 package de.tallerik.fivem.documenter.generator;
 
+import de.tallerik.fivem.documenter.Launcher;
+import de.tallerik.fivem.documenter.generator.types.DocsTemplate;
 import de.tallerik.fivem.documenter.reader.types.ReaderObject;
 import de.tallerik.fivem.documenter.reader.types.ReaderPackage;
+import javafx.util.Pair;
 import sun.misc.IOUtils;
 import sun.nio.ch.IOUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,13 +27,42 @@ public class Generator {
         doc = read(getClass().getResourceAsStream("/resources/doc.html"));
         nav = read(getClass().getResourceAsStream("/resources/nav.html"));
         nav_sub = read(getClass().getResourceAsStream("/resources/nav_sub.html"));
+        DocsTemplate template = new DocsTemplate(doc, nav, nav_sub);
         System.out.println("Reading completed.");
+
         System.out.println("Generating HTML");
+
+        // Time
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
         LocalDateTime dateTime = LocalDateTime.now();
         String date = dateTime.format(format);
-        mainhtml.replaceAll("{{LASTUPDATE}}", date);
+        mainhtml.replaceAll("[[LASTUPDATE]]", date);
 
+        // Runner     returns Sidebar and Content
+        Pair<String, String> runner = GeneratorRunner.generate(pack, template);
+        String sidebar = runner.getKey();
+        String content = runner.getValue();
+        mainhtml.replaceAll("[[NAV_BODY]]", sidebar);
+        mainhtml.replaceAll("[[DOC_BODY]]", content);
+
+        System.out.println("HTML generated successful.\nSaving...");
+        if(Launcher.output.exists()) {
+            System.out.println("Output file exists. Deleting...");
+            if(Launcher.output.delete()) {
+                System.out.println("File deleted.");
+            } else {
+                System.out.println("Cant delete file: " + Launcher.output.getAbsolutePath());
+            }
+        }
+        try {
+            Launcher.output.createNewFile();
+            FileWriter writer = new FileWriter(Launcher.output);
+            writer.write(mainhtml);
+            writer.close();
+            System.out.println("Saving completed.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         System.out.println("Generator finished.");
