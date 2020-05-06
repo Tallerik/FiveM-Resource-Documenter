@@ -28,19 +28,19 @@ public class ReaderResource implements ReaderObject {
 
 
     public String getFullPath() {
-        return null;
+        return path;
     }
 
     public String getFile() {
-        return null;
+        return file.getAbsolutePath();
     }
 
     public String getName() {
-        return null;
+        return name;
     }
 
     public boolean isResource() {
-        return false;
+        return res;
     }
 
     public void setName(String name) {
@@ -49,10 +49,6 @@ public class ReaderResource implements ReaderObject {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public boolean isRes() {
-        return res;
     }
 
     public void setFile(File file) {
@@ -77,6 +73,18 @@ public class ReaderResource implements ReaderObject {
 
     public Map<String, File> getdataFiles() {
         return dataFiles;
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
+    }
+
+    public boolean propertiesHasKey(String key) {
+        return getProperties().containsKey(key);
+    }
+
+    public boolean isServerOnly() {
+        return serverOnly;
     }
 
     public void process() {
@@ -169,7 +177,6 @@ public class ReaderResource implements ReaderObject {
                         continue;  // TODO: Workaround for this
                     }
                     if(line.split("'").length > 1) {
-                        System.out.println(line);
                         serverLua.add(new LuaFile(basePath + sep + line.split("'")[1], ScriptType.SERVER_SCRIPT));
                     } else if(line.split("\"").length > 1) {
                         serverLua.add(new LuaFile(basePath + sep + line.split("\"")[1], ScriptType.SERVER_SCRIPT));

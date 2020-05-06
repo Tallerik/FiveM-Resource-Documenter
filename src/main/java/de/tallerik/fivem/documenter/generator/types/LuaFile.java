@@ -16,11 +16,37 @@ public class LuaFile {
         this.file = file;
         this.type = type;
     }
+
     public LuaFile(String file, ScriptType type) {
         this.file = new File(file);
         this.type = type;
     }
+
     public void process() {
         name = file.getName();
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public Map<String, Integer> getAddedEventHandlers() {
+        return addedEventHandlers;
+    }
+
+    public Map<String, Integer> getTriggeredClientEvents() {
+        return triggeredClientEvents;
+    }
+
+    public Map<String, Integer> getTriggeredServerEvents() {
+        return triggeredServerEvents;
+    }
+
+    public ScriptType getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
     }
 }

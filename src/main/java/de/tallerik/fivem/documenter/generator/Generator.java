@@ -23,10 +23,10 @@ public class Generator {
 
     public Generator(ReaderPackage pack) {
         System.out.println("Generator started.\nReading Files:");
-        mainhtml = read(getClass().getResourceAsStream("/resources/start.html"));
-        doc = read(getClass().getResourceAsStream("/resources/doc.html"));
-        nav = read(getClass().getResourceAsStream("/resources/nav.html"));
-        nav_sub = read(getClass().getResourceAsStream("/resources/nav_sub.html"));
+        mainhtml = read(getClass().getResourceAsStream("/start.html"));
+        doc = read(getClass().getResourceAsStream("/doc.html"));
+        nav = read(getClass().getResourceAsStream("/nav.html"));
+        nav_sub = read(getClass().getResourceAsStream("/nav_sub.html"));
         DocsTemplate template = new DocsTemplate(doc, nav, nav_sub);
         System.out.println("Reading completed.");
 
@@ -36,14 +36,14 @@ public class Generator {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
         LocalDateTime dateTime = LocalDateTime.now();
         String date = dateTime.format(format);
-        mainhtml.replaceAll("[[LASTUPDATE]]", date);
+        mainhtml = mainhtml.replace("[[LASTUPDATE]]", date);
 
         // Runner     returns Sidebar and Content
         Pair<String, String> runner = GeneratorRunner.generate(pack, template);
         String sidebar = runner.getKey();
         String content = runner.getValue();
-        mainhtml.replaceAll("[[NAV_BODY]]", sidebar);
-        mainhtml.replaceAll("[[DOC_BODY]]", content);
+        mainhtml = mainhtml.replace("[[NAV_BODY]]", sidebar);
+        mainhtml = mainhtml.replace("[[DOC_BODY]]", content);
 
         System.out.println("HTML generated successful.\nSaving...");
         if(Launcher.output.exists()) {
