@@ -15,19 +15,19 @@ public class ReaderPackage implements ReaderObject {
     }
 
     public String getFullPath() {
-        return null;
+        return file.getAbsolutePath();
     }
 
     public String getFile() {
-        return null;
+        return file.getAbsolutePath();
     }
 
     public String getName() {
-        return null;
+        return name;
     }
 
     public boolean isResource() {
-        return false;
+        return res;
     }
 
     public void setFile(File file) {
