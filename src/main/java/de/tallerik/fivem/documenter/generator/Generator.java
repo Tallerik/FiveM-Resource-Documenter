@@ -33,7 +33,7 @@ public class Generator {
         System.out.println("Generating HTML");
 
         // Time
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.now();
         String date = dateTime.format(format);
         mainhtml = mainhtml.replace("[[LASTUPDATE]]", date);

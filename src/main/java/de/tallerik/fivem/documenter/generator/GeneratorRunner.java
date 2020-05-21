@@ -8,9 +8,12 @@ import de.tallerik.fivem.documenter.reader.types.ReaderResource;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class GeneratorRunner {
+    static List<String> runnedover = new ArrayList<>();
     // Returns Sidebar and Content
     public static Pair<String, String> generate(ReaderPackage pack, DocsTemplate template) {
         String sidebar = "";
@@ -23,6 +26,10 @@ public class GeneratorRunner {
     public static Pair<String, String> loopThrow(ReaderPackage pack, Pair<String, String> data, DocsTemplate template) {
         String sidebar = data.getKey(), content = data.getValue();
         for (ReaderObject object : pack.getObj()) {
+            sidebar = sidebar + object.getName() + "<br>";
+            if(runnedover.contains(object.getName())) {
+                continue;
+            }
             if(object instanceof ReaderResource) {
                 String doc = template.getDoc();
                 ReaderResource res = (ReaderResource)object;
@@ -31,11 +38,11 @@ public class GeneratorRunner {
                 String documentation = "";
 
                 // Properties
-                if(res.propertiesHasKey("manifest_version"))
+                if(res.propertiesHasKey("description"))
                     documentation = documentation + "<h3><strong>Description:</strong> " + res.getProperties().get("description") + "</h3>";
                 if(res.propertiesHasKey("author"))
                     documentation = documentation + "<h3><strong>Author:</strong> " + res.getProperties().get("author") + "</h3>";
-                if(res.propertiesHasKey("description"))
+                if(res.propertiesHasKey("manifest_version"))
                     documentation = documentation + "<h3><strong>Manifest Version:</strong> " + res.getProperties().get("manifest_version") + "</h3>";
                 documentation = documentation + "<h4><strong>Pfad:</strong> " + res.getFullPath() + "</h4>";
                 if(res.isServerOnly())
@@ -76,6 +83,7 @@ public class GeneratorRunner {
                 }
                 doc = doc.replace("[[DOC_BODY]]", "<div>" + documentation + "</div>");
                 content = content + doc;
+                runnedover.add(res.getName());
 
             } else { // ReaderPackage
                 ReaderPackage readerPackage = (ReaderPackage) object;
@@ -83,6 +91,7 @@ public class GeneratorRunner {
                 Pair<String, String> init = loopThrow(readerPackage, new Pair<>(sidebar, content), template);
                 sidebar = sidebar + init.getKey();
                 content = content + init.getValue();
+                runnedover.add(readerPackage.getName());
             }
         }
 

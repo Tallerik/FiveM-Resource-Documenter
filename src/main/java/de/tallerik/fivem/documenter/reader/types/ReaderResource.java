@@ -23,6 +23,7 @@ public class ReaderResource implements ReaderObject {
     List<LuaFile> serverLua = new ArrayList<>();
     List<LuaFile> sharedLua = new ArrayList<>();
     Map<String, File> dataFiles = new HashMap<>();
+    Map<String, File> streamFiles = new HashMap<>();
     Map<String, String> properties = new HashMap<>();
     boolean serverOnly = false;
 
@@ -87,6 +88,10 @@ public class ReaderResource implements ReaderObject {
         return serverOnly;
     }
 
+    public Map<String, File> getStreamFiles() {
+        return streamFiles;
+    }
+
     public void process() {
         for (File f : file.listFiles()) {
             if(f.getName().equals("fxmanifest.lua") || f.getName().equals("__resource.lua")) {
@@ -96,6 +101,12 @@ public class ReaderResource implements ReaderObject {
         }
         if(manifest != null) {
             readManifest(manifest);
+        }
+        File streamfolder = new File(file.getAbsolutePath() + File.separator + "stream");
+        if(streamfolder.exists() && streamfolder.isDirectory()) {
+            for (File f : streamfolder.listFiles()) {
+                streamFiles.put(f.getName(), f);
+            }
         }
     }
 
@@ -154,7 +165,7 @@ public class ReaderResource implements ReaderObject {
 
             // client_script
             if(line.startsWith("client_scripts ")) {
-                if(line.endsWith("{")) {
+                if(line.contains("{")) {
                     bracket = "client";
                 } else {
                     if(line.contains("*") || !line.contains(".lua")) {
@@ -170,7 +181,7 @@ public class ReaderResource implements ReaderObject {
 
             // server_script
             if(line.startsWith("server_script ")) {
-                if(line.endsWith("{")) {
+                if(line.contains("{")) {
                     bracket = "server";
                 } else {
                     if(line.contains("*") || !line.contains(".lua")) {
@@ -186,7 +197,7 @@ public class ReaderResource implements ReaderObject {
 
             // shared_script
             if(line.startsWith("shared_script ")) {
-                if(line.endsWith("{")) {
+                if(line.contains("{")) {
                     bracket = "shared";
                 } else {
                     if(line.contains("*") || !line.contains(".lua")) {
